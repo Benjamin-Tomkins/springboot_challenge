@@ -1,8 +1,8 @@
 package com.springboot.chitter.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import com.springboot.chitter.bean.HelloWorldJson;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 // REST Controller
@@ -11,11 +11,10 @@ public class HelloWorld {
 
     // GET
     // URI - /hello-world
-    // method - "Hello World"
-    @RequestMapping(method = RequestMethod.GET, path = "/hello-world")
-    public String helloWorld() {
-        return "Hello World";
+    // JSON - "Hello World"
+    @GetMapping(path = "/hello-world")
+    public HelloWorldJson helloWorld() {
+        return new HelloWorldJson("Hello World");
     }
-
 
 }
