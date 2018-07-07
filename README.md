@@ -1,8 +1,8 @@
 Spring Boot Chitter Challenge
 =================
 
-###Features:
--------
+#### Features :
+
 
 ```
 STRAIGHT UP
@@ -40,20 +40,20 @@ So that I can stay constantly tapped in to the shouty box of Chitter
 I want to receive an email if I am tagged in a Peep
 ```
 
-##Tech Notes :
+#### Tech Notes :
 
-###RESTful Web Services model guideline and end points for this project
+##### RESTful Web Services model guideline and end points for this project
 
 Social Media Application
 
 User -> Posts .. (one-to-many relationship)
-```
-  + Retrieve all Users    -   GET     /users
-  + Create a Users        -   POST    /users
-  + Retrieve one User     -   GET     /users/{id} -> /users/1
-  + Delete a User         -   DELETE  /users/{id} -> /users/1
 
-  + Retrieve all posts for a User -   GET     /users/{id}/posts
-  + Create a post for a User      -   POST    /users/{id}/posts
-  + Retrieve details of a posts   -   GET     /users/{id}/posts/{post_id}
-```
+  |     Task      | HTTP-method | URI |
+  | --- | --- | --- |
+  | Retrieve all Users    |   GET    |  /users |
+  | Create a Users        |   POST   |  /users |
+  | Retrieve one User     |   GET    |  /users/{id} -> /users/1 |
+  | Delete a User         |   DELETE | /users/{id} -> /users/1 |
+  | Retrieve all posts for a User |   GET  |   /users/{id}/posts |
+  | Create a post for a User      |   POST |   /users/{id}/posts |
+  | Retrieve details of a posts   |   GET  |   /users/{id}/posts/{post_id} |
