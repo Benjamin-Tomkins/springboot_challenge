@@ -21,6 +21,9 @@ public class UserJpaController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PostRepository postRepository;
+
 
     //GET	/users
     @GetMapping("/jpa/users")
@@ -67,7 +70,7 @@ public class UserJpaController {
     }
 
 
-    //GET	/users
+    //GET	//jpa/users/{id}/posts
     @GetMapping("/jpa/users/{id}/posts")
     public List<Post> retrieveAllPosts(@PathVariable int id){
 
@@ -78,6 +81,30 @@ public class UserJpaController {
         }
 
         return userOptional.get().getPosts();
+    }
+
+
+    //POST	//jpa/users/{id}/posts
+    //CREATED 201 Location → http://localhost:3000/users/4
+    @PostMapping("/jpa/users/{id}/posts")
+    public ResponseEntity createPost(@PathVariable int id, @RequestBody Post post) {
+
+        Optional<User> userOptional = userRepository.findById(id);
+
+        if(!userOptional.isPresent()) {
+            throw new UserNotFoundException("id-" + id);
+        }
+
+        User user = userOptional.get();
+        post.setUser(user);
+        postRepository.save(post);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(post.getId()).toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
 }

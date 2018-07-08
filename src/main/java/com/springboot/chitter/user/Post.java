@@ -30,6 +30,10 @@ public class Post {
         this.description = description;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
         return String.format( "Post [id=%s, description=%s]", id, description);

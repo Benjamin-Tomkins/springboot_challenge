@@ -4,6 +4,8 @@
 
 **Current status : working on the APIs before tackling the user cases**
 
+**COMPREHENSIVE TESTS WILL BE DONE WHEN I KNOW WHAT I'M DOING**
+
 #### Features :
 
 ```
