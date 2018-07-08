@@ -34,6 +34,17 @@ public class UserController {
     }
 
 
+    //DELETE	/users/{id}
+    @DeleteMapping("/users/{id}")
+    public void deleteUser(@PathVariable int id) {
+        User user = service.deleteById(id);
+
+        if(user==null) {
+            throw new UserNotFoundException("id-"+ id);
+        }
+    }
+
+
     //POST	/users
     //CREATED 201 Location → http://localhost:3000/users/4
     @PostMapping("/users")
