@@ -1,4 +1,4 @@
-package com.springboot.chitter.bean;
+package com.springboot.chitter._helloworld;
 
 import lombok.Data;
 
