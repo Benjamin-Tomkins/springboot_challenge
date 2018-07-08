@@ -1,7 +1,9 @@
 ![](banner.png)
 
-#### Features :
+**This project has been created from scratch without the aid of another project for reference**
+**Current status : working on the APIs before tackling the user cases**
 
+#### Features :
 
 ```
 STRAIGHT UP
