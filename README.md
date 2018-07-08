@@ -1,5 +1,4 @@
-Spring Boot Chitter Challenge
-=================
+![](banner.png)
 
 #### Features :
 
@@ -57,3 +56,28 @@ User -> Posts .. (one-to-many relationship)
   | Retrieve all posts for a User |   GET  |   /users/{id}/posts |
   | Create a post for a User      |   POST |   /users/{id}/posts |
   | Retrieve details of a posts   |   GET  |   /users/{id}/posts/{post_id} |
+
+```Hibernate: drop table user if exists```
+
+```Hibernate: drop sequence if exists hibernate_sequence```
+
+```Hibernate: create table user (
+id integer not null, 
+birth_date timestamp, 
+name varchar(255), 
+primary key (id))```
+
+```localhost:3000/h2-console
+jdbc:h2:mem:testdb```
+
+```
+Following are the annotations used by the controllers:
+@RestController - this annotation will treat class as controller that defines the @Controller and @ResponseBody annotations
+@RequestMapping - used the map web request onto specific methods
+@GetMapping - specialized version of @RequestMapping annotation that method handle the HTTP GET request with given URI
+@PostMapping - same as @GetMapping but handle the HTTP POST method
+@PutMapping - same as @GetMapping but handle the HTTP PUT method
+@DeleteMapping - same as @GetMapping but handle the HTTP DELETE method
+@PathVariable - obtain a parameter to a web request, in our example movie or review ID
+@RequestBody - this annotation represents the body of the request, in our example, we map the body of the request to a movie and review data model class
+```
