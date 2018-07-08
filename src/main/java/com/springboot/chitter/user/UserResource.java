@@ -1,8 +1,11 @@
 package com.springboot.chitter.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -27,12 +30,17 @@ public class UserResource {
 
 
     //POST	/users
-    //input - details of user
-    //output - CREATED & Return the created URI
-    //test - use https://www.getpostman.com/ or curl
+    //CREATED 201 Location → http://localhost:3000/users/4
     @PostMapping("/users")
-    public void createUser(@RequestBody User user) {
+    public ResponseEntity createUser(@RequestBody User user) {
         User savedUser = service.save(user);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedUser.getId()).toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
 }
