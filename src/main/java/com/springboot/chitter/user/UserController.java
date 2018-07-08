@@ -9,7 +9,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-public class UserResource {
+public class UserController {
 
     @Autowired
     private UserDaoService service;
