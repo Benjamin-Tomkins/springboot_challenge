@@ -68,10 +68,12 @@ name varchar(255),
 primary key (id))```
 
 ```localhost:3000/h2-console
-jdbc:h2:mem:testdb```
+jdbc:h2:mem:testdb
+```
 
 ```
 Following are the annotations used by the controllers:
+
 @RestController - this annotation will treat class as controller that defines the @Controller and @ResponseBody annotations
 @RequestMapping - used the map web request onto specific methods
 @GetMapping - specialized version of @RequestMapping annotation that method handle the HTTP GET request with given URI
