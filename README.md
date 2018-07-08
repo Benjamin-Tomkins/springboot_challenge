@@ -50,6 +50,12 @@ Social Media Application
 
 User -> Posts .. (one-to-many relationship)
 
+```
+Until I can work out the testing framework, one-to-many posts can be seen here
+http://localhost:3000/jpa/users/1001/posts
+```
+
+
   |     Task      | HTTP-method | URI |
   | --- | --- | --- |
   | Retrieve all Users    |   GET    |  /users |
