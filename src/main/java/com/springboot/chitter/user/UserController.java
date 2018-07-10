@@ -1,40 +1,51 @@
 package com.springboot.chitter.user;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class UserController {
 
+
     @Autowired
-    private UserDaoService service;
+    private UserRepository userRepository;
+
+    @Autowired
+    private PostRepository postRepository;
 
 
-    //GET	/users
+
     @GetMapping("/users")
     public List<User> retrieveAllUsers(){
-        return service.findAll();
+        return userRepository.findAll();
     }
 
 
-    //GET	/users/{id}
-    @GetMapping("/users/{id}")
+    @GetMapping(path = "/users/{id}")
     public Resource<User> retrieveUser(@PathVariable int id) {
-        User user = service.findOne(id);
+        Optional<User> user = userRepository.findById(id);
 
-        if(user==null) { throw new UserNotFoundException("id-"+ id); }
+        if (!user.isPresent())
+            throw new UserNotFoundException("id-" + id);
 
-        // HATEOUS _link to all users
-        Resource<User> resource = new Resource<User>(user);
+        Resource<User> resource = new Resource<User>(user.get());
         ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).retrieveAllUsers());
         resource.add(linkTo.withRel("all-users"));
 
@@ -42,22 +53,15 @@ public class UserController {
     }
 
 
-    //DELETE	/users/{id}
     @DeleteMapping("/users/{id}")
     public void deleteUser(@PathVariable int id) {
-        User user = service.deleteById(id);
-
-        if(user==null) {
-            throw new UserNotFoundException("id-"+ id);
-        }
+        userRepository.deleteById(id);
     }
 
 
-    //POST	/users
-    //CREATED 201 Location → http://localhost:3000/users/4
     @PostMapping("/users")
     public ResponseEntity createUser(@Valid @RequestBody User user) {
-        User savedUser = service.save(user);
+        User savedUser = userRepository.save(user);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -67,4 +71,60 @@ public class UserController {
         return ResponseEntity.created(location).build();
     }
 
+
+    @GetMapping("/users/{id}/posts")
+    public List<Post> retrieveAllPosts(@PathVariable int id){
+
+        Optional<User> userOptional = userRepository.findById(id);
+
+        if(!userOptional.isPresent()) {
+            throw new UserNotFoundException("id-" + id);
+        }
+
+        return userOptional.get().getPosts();
+    }
+
+
+    @PostMapping("/users/{id}/posts")
+    public ResponseEntity createPost(@PathVariable int id, @RequestBody Post post) {
+
+        Optional<User> userOptional = userRepository.findById(id);
+
+        if(!userOptional.isPresent()) {
+            throw new UserNotFoundException("id-" + id);
+        }
+
+        User user = userOptional.get();
+        post.setUser(user);
+        postRepository.save(post);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(post.getId()).toUri();
+
+        return ResponseEntity.created(location).build();
+    }
+
+
+    @GetMapping("/users/{id}/posts/{post_id}")
+    public Resource<Post> retrievePost(@PathVariable int id, @PathVariable int post_id) {
+
+        Optional<Post> postOptional = postRepository.findById(post_id);
+
+        if (!postOptional.isPresent())
+            throw new PostNotFoundException("id-" + post_id);
+        if (postOptional.get().getUserId() != id)
+            throw new PostNotFoundException("id-" + post_id);
+
+
+        Resource<Post> resource = new Resource<Post>(postOptional.get());
+        ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).retrieveAllPosts(id));
+        resource.add(linkTo.withRel("all-posts"));
+
+        return resource;
+    }
+
 }
+
+//post.getUserId()==id

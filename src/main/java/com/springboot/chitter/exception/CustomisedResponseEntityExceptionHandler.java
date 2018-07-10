@@ -1,5 +1,6 @@
 package com.springboot.chitter.exception;
 
+import com.springboot.chitter.user.PostNotFoundException;
 import com.springboot.chitter.user.UserNotFoundException;
 import com.sun.deploy.net.HttpResponse;
 import org.springframework.http.HttpHeaders;
@@ -24,7 +25,6 @@ public class CustomisedResponseEntityExceptionHandler
 
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
-
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
 
         return new ResponseEntity(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -33,15 +33,22 @@ public class CustomisedResponseEntityExceptionHandler
 
     @ExceptionHandler(UserNotFoundException.class)
     public final ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
-
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
 
         return new ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
+
+    @ExceptionHandler(PostNotFoundException.class)
+    public final ResponseEntity<Object> handlePostNotFoundException(PostNotFoundException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+
+        return new ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), "Validation Failed", ex.getBindingResult().toString());
 
         return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
