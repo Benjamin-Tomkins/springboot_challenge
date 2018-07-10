@@ -113,7 +113,7 @@ public class UserController {
         Optional<User> userOptional = userRepository.findById(user_id);
         Optional<Post> postOptional = postRepository.findById(post_id);
 
-        if (!postOptional.isPresent())
+        if (!postOptional.isPresent() || !userOptional.isPresent())
             throw new PostNotFoundException("id-" + post_id);
         if (userOptional.get().getId() != postOptional.get().getUserId())
             throw new PostNotFoundException("id-" + post_id);

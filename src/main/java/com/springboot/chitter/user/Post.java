@@ -20,22 +20,18 @@ public class Post {
 
 
     public Integer getId() {
-
         return id;
     }
 
     public void setId(Integer id) {
-
         this.id = id;
     }
 
     public String getDescription() {
-
         return description;
     }
 
     public void setDescription(String description) {
-
         this.description = description;
     }
 
@@ -44,7 +40,6 @@ public class Post {
     }
 
     public void setUser(User user) {
-
         this.user = user;
     }
 
