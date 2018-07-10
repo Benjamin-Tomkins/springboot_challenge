@@ -107,24 +107,23 @@ public class UserController {
     }
 
 
-    @GetMapping("/users/{id}/posts/{post_id}")
-    public Resource<Post> retrievePost(@PathVariable int id, @PathVariable int post_id) {
+    @GetMapping("/users/{user_id}/posts/{post_id}")
+    public Resource<Post> retrievePost(@PathVariable int user_id, @PathVariable int post_id) {
 
+        Optional<User> userOptional = userRepository.findById(user_id);
         Optional<Post> postOptional = postRepository.findById(post_id);
 
-        if (!postOptional.isPresent() || postOptional.get().getUserId() != id)
+        if (!postOptional.isPresent())
             throw new PostNotFoundException("id-" + post_id);
-        if (postOptional.get().getUserId() != id)
+        if (userOptional.get().getId() != postOptional.get().getUserId())
             throw new PostNotFoundException("id-" + post_id);
 
 
         Resource<Post> resource = new Resource<Post>(postOptional.get());
-        ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).retrieveAllPosts(id));
+        ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).retrieveAllPosts(user_id));
         resource.add(linkTo.withRel("all-posts"));
 
         return resource;
     }
 
 }
-
-//post.getUserId()==id
