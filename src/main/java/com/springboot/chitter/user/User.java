@@ -34,6 +34,10 @@ public class User {
     @JsonIgnore
     private List<Post> posts;
 
+    @OneToMany(mappedBy="user")
+    @JsonIgnore
+    private List<Comment> comments;
+
 
     protected User() {}
 

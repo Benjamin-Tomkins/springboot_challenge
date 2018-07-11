@@ -13,7 +13,7 @@ public class Post {
     @Id
     @GeneratedValue
     private Integer id;
-    private String description;
+    private String post_text;
 
     @ManyToOne(fetch=FetchType.LAZY)
     private User user;
@@ -27,12 +27,12 @@ public class Post {
         this.id = id;
     }
 
-    public String getDescription() {
-        return description;
+    public String getPost_text() {
+        return post_text;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setPost_text(String post_text) {
+        this.post_text = post_text;
     }
 
     public Integer getUserId() {
@@ -46,6 +46,6 @@ public class Post {
 
     @Override
     public String toString() {
-        return String.format( "Post [id=%s, description=%s]", id, description);
+        return String.format( "Post [id=%s, post_text=%s]", id, post_text);
     }
 }

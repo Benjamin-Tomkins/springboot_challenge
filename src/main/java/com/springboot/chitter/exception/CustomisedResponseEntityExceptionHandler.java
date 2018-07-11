@@ -1,5 +1,6 @@
 package com.springboot.chitter.exception;
 
+import com.springboot.chitter.user.CommentNotFoundException;
 import com.springboot.chitter.user.PostNotFoundException;
 import com.springboot.chitter.user.UserNotFoundException;
 import com.sun.deploy.net.HttpResponse;
@@ -41,6 +42,14 @@ public class CustomisedResponseEntityExceptionHandler
 
     @ExceptionHandler(PostNotFoundException.class)
     public final ResponseEntity<Object> handlePostNotFoundException(PostNotFoundException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+
+        return new ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+
+    @ExceptionHandler(CommentNotFoundException.class)
+    public final ResponseEntity<Object> handleCommentNotFoundException(CommentNotFoundException ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
 
         return new ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND);
