@@ -6,6 +6,8 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -103,7 +105,12 @@ public class UserController {
                 .path("/{id}")
                 .buildAndExpand(post.getId()).toUri();
 
-        return ResponseEntity.created(location).build();
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Access-Control-Allow-Origin","*");
+        ResponseEntity responseEntity = new ResponseEntity("",responseHeaders,HttpStatus.CREATED);
+        responseEntity.created(location).build();
+
+        return responseEntity;
     }
 
 
