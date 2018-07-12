@@ -6,15 +6,8 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -34,13 +27,15 @@ public class UserController {
 
 
 
-    @GetMapping("/users")
+    @CrossOrigin
+    @GetMapping(path="/users", produces="application/json")
     public List<User> retrieveAllUsers(){
         return userRepository.findAll();
     }
 
 
-    @GetMapping(path = "/users/{id}")
+    @CrossOrigin
+    @GetMapping(path="/users/{id}", produces="application/json")
     public Resource<User> retrieveUser(@PathVariable int id) {
         Optional<User> user = userRepository.findById(id);
 
@@ -55,13 +50,15 @@ public class UserController {
     }
 
 
-    @DeleteMapping("/users/{id}")
+    @CrossOrigin
+    @DeleteMapping(path="/users/{id}", consumes="application/json", produces="application/json")
     public void deleteUser(@PathVariable int id) {
         userRepository.deleteById(id);
     }
 
 
-    @PostMapping("/users")
+    @CrossOrigin
+    @PostMapping(path="/users", consumes="application/json", produces="application/json")
     public ResponseEntity createUser(@Valid @RequestBody User user) {
         User savedUser = userRepository.save(user);
 
@@ -74,7 +71,8 @@ public class UserController {
     }
 
 
-    @GetMapping("/users/{id}/posts")
+    @CrossOrigin
+    @GetMapping(path="/users/{id}/posts", produces="application/json")
     public List<Post> retrieveAllPosts(@PathVariable int id){
 
         Optional<User> userOptional = userRepository.findById(id);
@@ -87,7 +85,8 @@ public class UserController {
     }
 
 
-    @PostMapping("/users/{id}/posts")
+    @CrossOrigin
+    @PostMapping(path="/users/{id}/posts", consumes="application/json", produces="application/json")
     public ResponseEntity createPost(@PathVariable int id, @RequestBody Post post) {
 
         Optional<User> userOptional = userRepository.findById(id);
@@ -105,16 +104,12 @@ public class UserController {
                 .path("/{id}")
                 .buildAndExpand(post.getId()).toUri();
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("Access-Control-Allow-Origin","*");
-        ResponseEntity responseEntity = new ResponseEntity("",responseHeaders,HttpStatus.CREATED);
-        responseEntity.created(location).build();
-
-        return responseEntity;
+        return ResponseEntity.created(location).build();
     }
 
 
-    @GetMapping("/users/{user_id}/posts/{post_id}")
+    @CrossOrigin
+    @GetMapping(path="/users/{user_id}/posts/{post_id}", produces="application/json")
     public Resource<Post> retrievePost(@PathVariable int user_id, @PathVariable int post_id) {
 
         Optional<User> userOptional = userRepository.findById(user_id);
