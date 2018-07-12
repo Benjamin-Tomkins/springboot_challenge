@@ -53,6 +53,7 @@ public class UserController {
     @CrossOrigin
     @DeleteMapping(path="/users/{id}", consumes="application/json", produces="application/json")
     public void deleteUser(@PathVariable int id) {
+
         userRepository.deleteById(id);
     }
 
@@ -82,6 +83,22 @@ public class UserController {
         }
 
         return userOptional.get().getPosts();
+    }
+
+
+    @CrossOrigin
+    @DeleteMapping(path="/users/{user_id}/posts/{post_id}", consumes="application/json", produces="application/json")
+    public void deletePost(@PathVariable int user_id, @PathVariable int post_id) {
+
+        Optional<User> userOptional = userRepository.findById(user_id);
+        Optional<Post> postOptional = postRepository.findById(post_id);
+
+        if (!postOptional.isPresent() || !userOptional.isPresent())
+            throw new PostNotFoundException("id-" + post_id);
+        if (userOptional.get().getId() != postOptional.get().getUserId())
+            throw new PostNotFoundException("id-" + post_id);
+
+        postRepository.deleteById(post_id);
     }
 
 
