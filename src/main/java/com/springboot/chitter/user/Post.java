@@ -1,10 +1,7 @@
 package com.springboot.chitter.user;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.util.Date;
 
 
 @Entity
@@ -15,8 +12,24 @@ public class Post {
     private Integer id;
     private String post_text;
 
+
+    private Date created;
+//    private Date updated;
+
+
     @ManyToOne(fetch=FetchType.LAZY)
     private User user;
+
+
+    @PrePersist
+    protected void onCreate() {
+        created = new Date();
+    }
+
+//    @PreUpdate
+//    protected void onUpdate() {
+//        updated = new Date();
+//    }
 
 
     public Integer getId() {
@@ -43,9 +56,13 @@ public class Post {
         this.user = user;
     }
 
+    public Date getCreated() {
+        return created;
+    }
+
 
     @Override
     public String toString() {
-        return String.format( "Post [id=%s, post_text=%s]", id, post_text);
+        return String.format( "Post [id=%s, post_text=%s, created=%s]", id, post_text, created);
     }
 }
